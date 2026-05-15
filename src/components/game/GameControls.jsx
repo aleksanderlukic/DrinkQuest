@@ -110,7 +110,7 @@ export default function GameControls({
         {/* Next + Reset */}
         <div className="flex gap-3">
           <button
-            onClick={onNext}
+            onClick={() => onNext()}
             className="flex-[3] py-4 rounded-2xl font-black text-base btn-primary active:scale-95 transition-all"
           >
             {t("game.play.next")} →

@@ -83,7 +83,9 @@ export function useGameState({
   // Stable next — never recreated, always operates on latest data via refs
   const next = useCallback(
     (forcedType = null) => {
-      const p = computePool(forcedType);
+      // Guard: only treat string values as a type filter (ignore DOM events / other objects)
+      const typeFilter = typeof forcedType === "string" ? forcedType : null;
+      const p = computePool(typeFilter);
       if (p.length === 0) return;
 
       const question = getNextQuestion(p, historyRef.current);
