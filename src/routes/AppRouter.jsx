@@ -8,6 +8,8 @@ import PointingGamePage from "../pages/PointingGamePage";
 import SpinTheBottlePage from "../pages/SpinTheBottlePage";
 import TruthOrDrinkPage from "../pages/TruthOrDrinkPage";
 import CouplesPage from "../pages/CouplesPage";
+import PartyPredictionsPage from "../pages/PartyPredictionsPage";
+import LeaderboardPage from "../pages/LeaderboardPage";
 import CustomPage from "../pages/CustomPage";
 import GeneratorPage from "../pages/GeneratorPage";
 import FavoritesPage from "../pages/FavoritesPage";
@@ -26,6 +28,11 @@ export default function AppRouter() {
       <Route path="/games/spin-the-bottle" element={<SpinTheBottlePage />} />
       <Route path="/games/truth-or-drink" element={<TruthOrDrinkPage />} />
       <Route path="/games/couples" element={<CouplesPage />} />
+      <Route
+        path="/games/party-predictions"
+        element={<PartyPredictionsPage />}
+      />
+      <Route path="/leaderboard" element={<LeaderboardPage />} />
       <Route path="/custom" element={<CustomPage />} />
       <Route path="/generator" element={<GeneratorPage />} />
       <Route path="/favorites" element={<FavoritesPage />} />

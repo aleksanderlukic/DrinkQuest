@@ -17,6 +17,7 @@ export default function NeverHaveIEverPage() {
     players,
     addPlayer,
     removePlayer,
+    clearPlayers,
     settings,
     customNhie,
   } = useApp();
@@ -83,7 +84,11 @@ export default function NeverHaveIEverPage() {
               </h3>
               <PlayerInput onAdd={addPlayer} />
               <div className="mt-3">
-                <PlayerList players={players} onRemove={removePlayer} />
+                <PlayerList
+                  players={players}
+                  onRemove={removePlayer}
+                  onClearAll={clearPlayers}
+                />
               </div>
             </div>
             <div>

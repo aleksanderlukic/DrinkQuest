@@ -17,6 +17,7 @@ export default function TruthOrDarePage() {
     players,
     addPlayer,
     removePlayer,
+    clearPlayers,
     settings,
     customTruths,
     customDares,
@@ -115,7 +116,11 @@ export default function TruthOrDarePage() {
               </h3>
               <PlayerInput onAdd={addPlayer} />
               <div className="mt-3">
-                <PlayerList players={players} onRemove={removePlayer} />
+                <PlayerList
+                  players={players}
+                  onRemove={removePlayer}
+                  onClearAll={clearPlayers}
+                />
               </div>
             </div>
             <div>

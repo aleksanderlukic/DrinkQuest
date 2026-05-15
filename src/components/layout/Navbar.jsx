@@ -12,6 +12,7 @@ export default function Navbar() {
   const navLinks = [
     { to: "/", label: t("nav.home"), exact: true },
     { to: "/games", label: t("nav.games") },
+    { to: "/leaderboard", label: `🏆 ${t("nav.leaderboard")}` },
     { to: "/favorites", label: t("nav.favorites") },
     { to: "/generator", label: t("nav.generator") },
     { to: "/custom", label: t("nav.custom") },

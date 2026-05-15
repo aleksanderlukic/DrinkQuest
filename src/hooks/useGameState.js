@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { getNextQuestion, randomItem, generateId } from "../utils/randomizer";
+import { useState, useCallback, useRef, useMemo } from "react";
+import { getNextQuestion, randomItem } from "../utils/randomizer";
 
 /**
  * Generic game state hook.
@@ -18,50 +18,51 @@ export function useGameState({
   contentMode = "mixed",
   activeTypes = null,
 }) {
-  const [history, setHistory] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [currentPlayer, setCurrentPlayer] = useState(null);
   const [roundCount, setRoundCount] = useState(0);
+  const [historyLength, setHistoryLength] = useState(0);
 
-  const getPool = useCallback(() => {
-    let pool = [];
+  // Use a ref for history so next() always reads the latest value
+  // without needing history in its dependency array (avoids stale closure).
+  const historyRef = useRef([]);
 
+  const pool = useMemo(() => {
+    let p = [];
     if (contentMode === "builtin" || contentMode === "mixed") {
-      pool = [...pool, ...builtinQuestions];
+      p = [...p, ...builtinQuestions];
     }
     if (
       (contentMode === "custom" || contentMode === "mixed") &&
       customQuestions.length > 0
     ) {
-      pool = [...pool, ...customQuestions];
+      p = [...p, ...customQuestions];
     }
-    if (pool.length === 0 && contentMode !== "builtin") {
-      pool = [...builtinQuestions];
+    if (p.length === 0 && contentMode !== "builtin") {
+      p = [...builtinQuestions];
     }
-
     if (difficulty !== "all") {
-      pool = pool.filter((q) => q.difficulty === difficulty);
+      p = p.filter((q) => q.difficulty === difficulty);
     }
-
     if (activeTypes && activeTypes.length > 0) {
-      pool = pool.filter((q) => activeTypes.includes(q.type));
+      p = p.filter((q) => activeTypes.includes(q.type));
     }
-
-    return pool;
+    return p;
   }, [builtinQuestions, customQuestions, difficulty, contentMode, activeTypes]);
 
   const next = useCallback(
     (forcedType = null) => {
-      let pool = getPool();
+      let p = pool;
       if (forcedType) {
-        pool = pool.filter((q) => q.type === forcedType);
+        p = p.filter((q) => q.type === forcedType);
       }
-      if (pool.length === 0) return;
+      if (p.length === 0) return;
 
-      const question = getNextQuestion(pool, history);
+      const question = getNextQuestion(p, historyRef.current);
       if (!question) return;
 
-      setHistory((prev) => [...prev, question.id]);
+      historyRef.current = [...historyRef.current, question.id];
+      setHistoryLength(historyRef.current.length);
       setCurrentQuestion(question);
       setRoundCount((c) => c + 1);
 
@@ -71,19 +72,19 @@ export function useGameState({
         setCurrentPlayer(null);
       }
     },
-    [getPool, history, players],
+    [pool, players],
   );
 
   const reset = useCallback(() => {
-    setHistory([]);
+    historyRef.current = [];
+    setHistoryLength(0);
     setCurrentQuestion(null);
     setCurrentPlayer(null);
     setRoundCount(0);
   }, []);
 
-  const pool = getPool();
   const totalQuestions = pool.length;
-  const usedCount = history.length;
+  const usedCount = historyLength;
   const allUsed = totalQuestions > 0 && usedCount >= totalQuestions * 1.5;
 
   return {

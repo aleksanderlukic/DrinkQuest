@@ -17,6 +17,7 @@ export default function PointingGamePage() {
     players,
     addPlayer,
     removePlayer,
+    clearPlayers,
     settings,
     customPointing,
   } = useApp();
@@ -84,7 +85,11 @@ export default function PointingGamePage() {
               </h3>
               <PlayerInput onAdd={addPlayer} />
               <div className="mt-3">
-                <PlayerList players={players} onRemove={removePlayer} />
+                <PlayerList
+                  players={players}
+                  onRemove={removePlayer}
+                  onClearAll={clearPlayers}
+                />
               </div>
             </div>
             <div>

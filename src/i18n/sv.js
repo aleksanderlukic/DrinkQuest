@@ -9,6 +9,7 @@ export const sv = {
     favorites: "Favoriter",
     custom: "Anpassat",
     generator: "Generator",
+    leaderboard: "Ledartavla",
     settings: "Inställningar",
     menu: "Meny",
     close: "Stäng meny",
@@ -60,6 +61,7 @@ export const sv = {
       title: "Välj Din Stämning",
       subtitle: "Något för varje typ av fest",
       classic: { title: "Klassiska Spel", desc: "Tidlösa festfavoriter" },
+      drinking: { title: "Drickspel", desc: "Drick upp, ha kul" },
       spicy: { title: "Heta Läget", desc: "För de modiga och djärva" },
       couples: { title: "Parläge", desc: "Bara ni två" },
       custom: { title: "Egna Paket", desc: "Dina regler, ditt spel" },
@@ -143,6 +145,20 @@ export const sv = {
       shortDesc: "Flirtigt & roligt",
       category: "Par",
     },
+    partyPredictions: {
+      title: "Kvällens Spådom",
+      description:
+        "Rösta på vem som blir fullast, störst flirt och mer. Den med flest röster dricker!",
+      shortDesc: "Vem tror du?",
+      category: "Grupp",
+      vote: "Alla pekar på personen som stämmer bäst!",
+      results: "Resultat",
+      mostVoted: "Kvällens vinnare",
+      votes: "röster",
+      drinkRule: "Drick upp!",
+      fullRanking: "Hela Rankningen",
+      seeResults: "Se Resultat",
+    },
   },
   game: {
     setup: {
@@ -160,6 +176,7 @@ export const sv = {
       playerCount: "{{count}} spelare",
       skipPenalty: "Skippa-straff",
       skipPenaltyDesc: "Drick om du skippar en fråga",
+      clearAll: "Rensa alla",
     },
     play: {
       truth: "Sanning",
@@ -449,6 +466,14 @@ export const sv = {
   errors: {
     generic: "Något gick fel. Försök igen.",
     noContent: "Inget innehåll tillgängligt för dessa inställningar.",
-    addPlayerFirst: "Lägg till minst 2 spelare för det här spelläget.",
+    addPlayerFirst: "Lägg till minst 2 spelare för att spela det här spelet.",
+  },
+  leaderboard: {
+    title: "Ledartavla",
+    subtitle: "Spåra vem som leder kvällen",
+    drinks: "Klunkar",
+    points: "Poäng",
+    reset: "Nollställ poäng",
+    noPlayers: "Lägg till spelare i ett spel för att spåra poäng här.",
   },
 };

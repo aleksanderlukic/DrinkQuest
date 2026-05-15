@@ -8,7 +8,8 @@ import SpinBottle from "../components/game/SpinBottle";
 const MODES = ["random", "truth", "dare", "drink"];
 
 export default function SpinTheBottlePage() {
-  const { t, isDark, players, addPlayer, removePlayer } = useApp();
+  const { t, isDark, players, addPlayer, removePlayer, clearPlayers } =
+    useApp();
   const [spinMode, setSpinMode] = useState("random");
   const [simpleMode, setSimpleMode] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -81,7 +82,11 @@ export default function SpinTheBottlePage() {
               </h3>
               <PlayerInput onAdd={addPlayer} />
               <div className="mt-3">
-                <PlayerList players={players} onRemove={removePlayer} />
+                <PlayerList
+                  players={players}
+                  onRemove={removePlayer}
+                  onClearAll={clearPlayers}
+                />
               </div>
             </div>
 

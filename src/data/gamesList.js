@@ -83,4 +83,16 @@ export const gamesList = [
     featured: false,
     popular: false,
   },
+  {
+    id: "party-predictions",
+    path: "/games/party-predictions",
+    emoji: "🔮",
+    gradient: "from-indigo-500 to-violet-600",
+    categoryKey: "Group",
+    titleKey: "games.partyPredictions.title",
+    descKey: "games.partyPredictions.description",
+    shortDescKey: "games.partyPredictions.shortDesc",
+    featured: false,
+    popular: true,
+  },
 ];

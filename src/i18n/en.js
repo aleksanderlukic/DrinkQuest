@@ -9,6 +9,7 @@ export const en = {
     favorites: "Favorites",
     custom: "Custom",
     generator: "Generator",
+    leaderboard: "Leaderboard",
     settings: "Settings",
     menu: "Menu",
     close: "Close menu",
@@ -60,6 +61,7 @@ export const en = {
       title: "Choose Your Vibe",
       subtitle: "Something for every kind of party",
       classic: { title: "Classic Games", desc: "Timeless party favorites" },
+      drinking: { title: "Drinking Games", desc: "Drink up, have fun" },
       spicy: { title: "Spicy Mode", desc: "For the brave and bold" },
       couples: { title: "Couples Mode", desc: "Just the two of you" },
       custom: { title: "Custom Packs", desc: "Your rules, your game" },
@@ -142,6 +144,20 @@ export const en = {
       shortDesc: "Flirty & fun",
       category: "Couples",
     },
+    partyPredictions: {
+      title: "Party Predictions",
+      description:
+        "Vote on who will be the most drunk, the biggest flirt, and more. The most-voted player drinks!",
+      shortDesc: "Who will it be?",
+      category: "Group",
+      vote: "Everyone point at the person who fits best!",
+      results: "Results",
+      mostVoted: "Tonight's winner",
+      votes: "votes",
+      drinkRule: "Drink up!",
+      fullRanking: "Full Ranking",
+      seeResults: "See Results",
+    },
   },
   game: {
     setup: {
@@ -159,6 +175,7 @@ export const en = {
       playerCount: "{{count}} players",
       skipPenalty: "Skip Penalty",
       skipPenaltyDesc: "Drink if you skip a question",
+      clearAll: "Clear all",
     },
     play: {
       truth: "Truth",
@@ -447,6 +464,14 @@ export const en = {
   errors: {
     generic: "Something went wrong. Please try again.",
     noContent: "No content available for these settings.",
-    addPlayerFirst: "Add at least 2 players for this game mode.",
+    addPlayerFirst: "Add at least 2 players to play this game.",
+  },
+  leaderboard: {
+    title: "Leaderboard",
+    subtitle: "Track who's leading the night",
+    drinks: "Drinks",
+    points: "Points",
+    reset: "Reset scores",
+    noPlayers: "Add players in any game to track scores here.",
   },
 };
