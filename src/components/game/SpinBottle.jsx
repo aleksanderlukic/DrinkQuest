@@ -1,67 +1,66 @@
 import { useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
 import { useApp } from "../../store/AppContext";
-import { randomItem, randomInt } from "../../utils/randomizer";
+import { randomItem } from "../../utils/randomizer";
 
 export default function SpinBottle({ players = [], spinMode = "random" }) {
   const { t, isDark } = useApp();
-  const [rotation, setRotation] = useState(0);
+  const controls = useAnimationControls();
   const [isSpinning, setIsSpinning] = useState(false);
   const [result, setResult] = useState(null);
-  const spinCountRef = useRef(0);
+  const currentRotation = useRef(0);
 
-  const handleSpin = () => {
+  const handleSpin = async () => {
     if (isSpinning) return;
     setIsSpinning(true);
     setResult(null);
-    spinCountRef.current += 1;
 
-    const extraSpins = randomInt(2, 5) * 360;
-    const finalAngle = randomInt(0, 359);
-    const totalRotation = rotation + extraSpins + finalAngle;
+    // 6–10 full rotations + random final angle for natural landing
+    const fullSpins = (Math.floor(Math.random() * 5) + 6) * 360;
+    const finalAngle = Math.floor(Math.random() * 360);
+    const totalRotation = currentRotation.current + fullSpins + finalAngle;
+    currentRotation.current = totalRotation;
 
-    setRotation(totalRotation);
+    await controls.start({
+      rotate: totalRotation,
+      transition: {
+        duration: 3.2,
+        ease: [0.15, 0.85, 0.3, 1], // fast spin-up → smooth ease-out landing
+      },
+    });
 
-    setTimeout(() => {
-      setIsSpinning(false);
-      // Pick result based on mode
-      const selectedPlayer = players.length > 0 ? randomItem(players) : null;
-      let action = spinMode;
-      if (spinMode === "random") {
-        action = randomItem(["truth", "dare", "drink"]);
-      }
-      setResult({ player: selectedPlayer, action });
-    }, 3000);
+    // Pick result after animation completes
+    const selectedPlayer = players.length > 0 ? randomItem(players) : null;
+    let action = spinMode;
+    if (spinMode === "random") {
+      action = randomItem(["truth", "dare", "drink"]);
+    }
+    setResult({ player: selectedPlayer, action });
+    setIsSpinning(false);
   };
 
   const actionLabel = (action) => {
     const labels = {
-      truth: {
-        text: t("spin.modes.truth"),
-        emoji: "",
-        color: "text-violet-400",
-      },
-      dare: { text: t("spin.modes.dare"), emoji: "", color: "text-pink-400" },
-      drink: { text: "Drink 🥃", emoji: "", color: "text-amber-400" },
-      kiss: { text: t("spin.modes.kiss"), emoji: "", color: "text-rose-400" },
+      truth: { text: t("spin.modes.truth"), color: "text-violet-400" },
+      dare: { text: t("spin.modes.dare"), color: "text-pink-400" },
+      drink: { text: "Drink 🥃", color: "text-amber-400" },
+      kiss: { text: t("spin.modes.kiss"), color: "text-rose-400" },
     };
-    return labels[action] || { text: action, emoji: "🎲", color: "text-white" };
+    return labels[action] || { text: action, color: "text-white" };
   };
 
   return (
     <div className="flex flex-col items-center gap-8">
       {/* Bottle */}
-      <div className="relative w-48 h-48 flex items-center justify-center">
+      <div className="relative w-56 h-56 flex items-center justify-center">
         <div
           className={`absolute inset-0 rounded-full ${isDark ? "bg-violet-600/10" : "bg-violet-100"}`}
         />
+        {/* Pointer marker at top */}
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-violet-500 z-10" />
         <motion.div
-          style={{ rotate: rotation }}
-          transition={{
-            duration: isSpinning ? 3 : 0,
-            ease: [0.17, 0.67, 0.12, 0.99],
-          }}
-          className="text-7xl select-none"
+          animate={controls}
+          className="text-8xl select-none"
           role="img"
           aria-label="Spinning bottle"
         >
@@ -79,16 +78,18 @@ export default function SpinBottle({ players = [], spinMode = "random" }) {
             : "btn-primary"
         }`}
       >
-        {isSpinning ? t("spin.spinning") : t("spin.spin")} 🌀
+        {isSpinning ? t("spin.spinning") : t("spin.spinButton")} 🌀
       </button>
 
       {/* Result */}
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {result && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 10 }}
+            key={currentRotation.current}
+            initial={{ opacity: 0, scale: 0.85, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8 }}
+            exit={{ opacity: 0, scale: 0.85 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
             className={`w-full rounded-2xl p-6 text-center ${
               isDark
                 ? "bg-slate-900 border border-white/10"
@@ -97,7 +98,7 @@ export default function SpinBottle({ players = [], spinMode = "random" }) {
           >
             {result.player && (
               <p
-                className={`text-lg font-black mb-1 ${isDark ? "text-white" : "text-slate-900"}`}
+                className={`text-xl font-black mb-2 ${isDark ? "text-white" : "text-slate-900"}`}
               >
                 {result.player}
               </p>
@@ -105,9 +106,7 @@ export default function SpinBottle({ players = [], spinMode = "random" }) {
             {(() => {
               const lbl = actionLabel(result.action);
               return (
-                <div>
-                  <p className={`text-lg font-bold ${lbl.color}`}>{lbl.text}</p>
-                </div>
+                <p className={`text-lg font-bold ${lbl.color}`}>{lbl.text}</p>
               );
             })()}
           </motion.div>
