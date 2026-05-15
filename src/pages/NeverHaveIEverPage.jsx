@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useApp } from "../store/AppContext";
 import { useGameState } from "../hooks/useGameState";
 import { neverHaveIEver } from "../data/games/neverHaveIEver";
@@ -25,19 +25,20 @@ export default function NeverHaveIEverPage() {
   const [contentMode, setContentMode] = useState(
     settings.contentMode || "builtin",
   );
+  const [skipPenalty, setSkipPenalty] = useState(false);
 
   const lang = language === "sv" ? "sv" : "en";
-  const data = neverHaveIEver[lang] || {};
 
-  const flatBuiltin =
-    difficulty === "all"
-      ? [...(data.soft || []), ...(data.normal || []), ...(data.brutal || [])]
-      : data[difficulty] || [];
-
-  let questions;
-  if (contentMode === "builtin") questions = flatBuiltin;
-  else if (contentMode === "custom") questions = customNhie || [];
-  else questions = [...flatBuiltin, ...(customNhie || [])];
+  const questions = useMemo(() => {
+    const data = neverHaveIEver[lang] || {};
+    const flat =
+      difficulty === "all"
+        ? [...(data.soft || []), ...(data.normal || []), ...(data.brutal || [])]
+        : data[difficulty] || [];
+    if (contentMode === "builtin") return flat;
+    if (contentMode === "custom") return customNhie || [];
+    return [...flat, ...(customNhie || [])];
+  }, [lang, difficulty, contentMode, customNhie]);
 
   const gameState = useGameState({
     builtinQuestions: questions,
@@ -47,8 +48,8 @@ export default function NeverHaveIEverPage() {
     contentMode: "builtin",
     activeTypes: [],
   });
-  const { currentQuestion, currentPlayer, next, reset, allUsed } = gameState;
-
+  const { currentQuestion, currentPlayer, next, reset, allUsed, roundCount } =
+    gameState;
   const handleReset = () => {
     reset();
     setPhase("setup");
@@ -104,6 +105,30 @@ export default function NeverHaveIEverPage() {
                 onChange={setContentMode}
               />
             </div>
+            <div
+              className={`flex items-center justify-between gap-4 p-4 rounded-2xl ${isDark ? "bg-white/5" : "bg-slate-50"}`}
+            >
+              <div>
+                <p
+                  className={`text-sm font-semibold ${isDark ? "text-slate-300" : "text-slate-700"}`}
+                >
+                  {t("game.setup.skipPenalty")} 🥃
+                </p>
+                <p
+                  className={`text-xs mt-0.5 ${isDark ? "text-slate-500" : "text-slate-400"}`}
+                >
+                  {t("game.setup.skipPenaltyDesc")}
+                </p>
+              </div>
+              <button
+                onClick={() => setSkipPenalty((p) => !p)}
+                className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${skipPenalty ? "bg-amber-500" : isDark ? "bg-white/20" : "bg-slate-300"}`}
+              >
+                <div
+                  className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 ${skipPenalty ? "translate-x-6" : "translate-x-0.5"}`}
+                />
+              </button>
+            </div>
             <button
               onClick={() => {
                 next();
@@ -149,8 +174,17 @@ export default function NeverHaveIEverPage() {
           </div>
         ) : (
           <>
-            <QuestionCard question={currentQuestion} player={currentPlayer} />
-            <GameControls onNext={next} onReset={handleReset} />
+            <QuestionCard
+              question={currentQuestion}
+              player={currentPlayer}
+              cardKey={roundCount}
+            />
+            <GameControls
+              onNext={next}
+              onReset={handleReset}
+              onSkip={next}
+              skipPenaltyEnabled={skipPenalty}
+            />
           </>
         )}
       </div>

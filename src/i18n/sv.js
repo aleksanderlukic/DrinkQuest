@@ -158,12 +158,15 @@ export const sv = {
       noPlayers: "Spelar utan namn",
       removePlayer: "Ta bort",
       playerCount: "{{count}} spelare",
+      skipPenalty: "Skippa-straff",
+      skipPenaltyDesc: "Drick om du skippar en fråga",
     },
     play: {
       truth: "Sanning",
       dare: "Konka",
       random: "Slumpa",
       next: "Nästa",
+      skip: "Skippa",
       shuffle: "Blanda",
       reset: "Återställ Spelet",
       noMoreCards: "Alla kort använda! Återställ för att spela igen.",
@@ -175,6 +178,8 @@ export const sv = {
       allUsed:
         "Du har gått igenom alla frågor! Tryck Återställ för att börja om.",
       round: "Omgång",
+      penaltyTitle: "Skippa-straff!",
+      penaltyDrink: "Drick {{count}} klunk(ar)!",
     },
     difficulty: {
       all: "Alla",

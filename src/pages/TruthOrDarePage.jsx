@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useApp } from "../store/AppContext";
 import { useGameState } from "../hooks/useGameState";
 import { truthOrDare } from "../data/games/truthOrDare";
@@ -21,54 +21,50 @@ export default function TruthOrDarePage() {
     customTruths,
     customDares,
   } = useApp();
-  const [phase, setPhase] = useState("setup"); // 'setup' | 'game'
+  const [phase, setPhase] = useState("setup");
   const [difficulty, setDifficulty] = useState(settings.difficulty || "all");
   const [contentMode, setContentMode] = useState(
     settings.contentMode || "builtin",
   );
   const [activeMode, setActiveMode] = useState("random");
+  const [skipPenalty, setSkipPenalty] = useState(false);
 
   const lang = language === "sv" ? "sv" : "en";
-  const builtinTruths = truthOrDare[lang]?.truths || {};
-  const builtinDares = truthOrDare[lang]?.dares || {};
 
-  // Flatten builtin by difficulty
-  const flatTruths =
-    difficulty === "all"
-      ? [
-          ...(builtinTruths.soft || []),
-          ...(builtinTruths.normal || []),
-          ...(builtinTruths.brutal || []),
-        ]
-      : builtinTruths[difficulty] || [];
-
-  const flatDares =
-    difficulty === "all"
-      ? [
-          ...(builtinDares.soft || []),
-          ...(builtinDares.normal || []),
-          ...(builtinDares.brutal || []),
-        ]
-      : builtinDares[difficulty] || [];
-
-  // Merge custom
-  const allBuiltin = [...flatTruths, ...flatDares];
-  let questions;
-  if (contentMode === "builtin") questions = allBuiltin;
-  else if (contentMode === "custom")
-    questions = [...(customTruths || []), ...(customDares || [])];
-  else
-    questions = [
-      ...allBuiltin,
-      ...(customTruths || []),
-      ...(customDares || []),
-    ];
-
-  // Filter by mode
-  const filteredByMode =
-    activeMode === "random"
+  const filteredByMode = useMemo(() => {
+    const builtinTruths = truthOrDare[lang]?.truths || {};
+    const builtinDares = truthOrDare[lang]?.dares || {};
+    const flatTruths =
+      difficulty === "all"
+        ? [
+            ...(builtinTruths.soft || []),
+            ...(builtinTruths.normal || []),
+            ...(builtinTruths.brutal || []),
+          ]
+        : builtinTruths[difficulty] || [];
+    const flatDares =
+      difficulty === "all"
+        ? [
+            ...(builtinDares.soft || []),
+            ...(builtinDares.normal || []),
+            ...(builtinDares.brutal || []),
+          ]
+        : builtinDares[difficulty] || [];
+    const allBuiltin = [...flatTruths, ...flatDares];
+    let questions;
+    if (contentMode === "builtin") questions = allBuiltin;
+    else if (contentMode === "custom")
+      questions = [...(customTruths || []), ...(customDares || [])];
+    else
+      questions = [
+        ...allBuiltin,
+        ...(customTruths || []),
+        ...(customDares || []),
+      ];
+    return activeMode === "random"
       ? questions
       : questions.filter((q) => q.type === activeMode);
+  }, [lang, difficulty, contentMode, activeMode, customTruths, customDares]);
 
   const gameState = useGameState({
     builtinQuestions: filteredByMode,
@@ -79,7 +75,8 @@ export default function TruthOrDarePage() {
     activeTypes: activeMode === "random" ? ["truth", "dare"] : [activeMode],
   });
 
-  const { currentQuestion, currentPlayer, next, reset, allUsed } = gameState;
+  const { currentQuestion, currentPlayer, next, reset, allUsed, roundCount } =
+    gameState;
 
   const handleStart = () => {
     next();
@@ -107,11 +104,9 @@ export default function TruthOrDarePage() {
               {t("games.truthOrDare.description")}
             </p>
           </div>
-
           <div
             className={`rounded-3xl p-6 space-y-6 ${isDark ? "bg-slate-900 border border-white/10" : "bg-white border border-slate-200 shadow-lg"}`}
           >
-            {/* Players */}
             <div>
               <h3
                 className={`font-bold text-sm mb-3 ${isDark ? "text-slate-300" : "text-slate-700"}`}
@@ -123,8 +118,6 @@ export default function TruthOrDarePage() {
                 <PlayerList players={players} onRemove={removePlayer} />
               </div>
             </div>
-
-            {/* Difficulty */}
             <div>
               <h3
                 className={`font-bold text-sm mb-3 ${isDark ? "text-slate-300" : "text-slate-700"}`}
@@ -133,8 +126,6 @@ export default function TruthOrDarePage() {
               </h3>
               <DifficultySelector value={difficulty} onChange={setDifficulty} />
             </div>
-
-            {/* Content mode */}
             <div>
               <h3
                 className={`font-bold text-sm mb-3 ${isDark ? "text-slate-300" : "text-slate-700"}`}
@@ -146,7 +137,31 @@ export default function TruthOrDarePage() {
                 onChange={setContentMode}
               />
             </div>
-
+            {/* Skip Penalty Toggle */}
+            <div
+              className={`flex items-center justify-between gap-4 p-4 rounded-2xl ${isDark ? "bg-white/5" : "bg-slate-50"}`}
+            >
+              <div>
+                <p
+                  className={`text-sm font-semibold ${isDark ? "text-slate-300" : "text-slate-700"}`}
+                >
+                  {t("game.setup.skipPenalty")} 🥃
+                </p>
+                <p
+                  className={`text-xs mt-0.5 ${isDark ? "text-slate-500" : "text-slate-400"}`}
+                >
+                  {t("game.setup.skipPenaltyDesc")}
+                </p>
+              </div>
+              <button
+                onClick={() => setSkipPenalty((p) => !p)}
+                className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${skipPenalty ? "bg-amber-500" : isDark ? "bg-white/20" : "bg-slate-300"}`}
+              >
+                <div
+                  className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 ${skipPenalty ? "translate-x-6" : "translate-x-0.5"}`}
+                />
+              </button>
+            </div>
             <button
               onClick={handleStart}
               disabled={filteredByMode.length === 0}
@@ -170,7 +185,6 @@ export default function TruthOrDarePage() {
             {t("games.truthOrDare.title")}
           </h1>
         </div>
-
         {allUsed ? (
           <div
             className={`text-center py-12 rounded-3xl ${isDark ? "bg-slate-900 border border-white/10" : "bg-white border border-slate-200"}`}
@@ -190,10 +204,16 @@ export default function TruthOrDarePage() {
           </div>
         ) : (
           <>
-            <QuestionCard question={currentQuestion} player={currentPlayer} />
+            <QuestionCard
+              question={currentQuestion}
+              player={currentPlayer}
+              cardKey={roundCount}
+            />
             <GameControls
               onNext={next}
               onReset={handleReset}
+              onSkip={next}
+              skipPenaltyEnabled={skipPenalty}
               modes={["truth", "dare", "random"]}
               activeMode={activeMode}
               onModeChange={setActiveMode}
