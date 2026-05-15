@@ -50,8 +50,13 @@ export function useGameState({
 
   // Stable helper: always computes from paramsRef.current
   const computePool = useCallback((forcedType = null) => {
-    const { builtinQuestions: bq, customQuestions: cq, difficulty: diff, contentMode: cm, activeTypes: at } =
-      paramsRef.current;
+    const {
+      builtinQuestions: bq,
+      customQuestions: cq,
+      difficulty: diff,
+      contentMode: cm,
+      activeTypes: at,
+    } = paramsRef.current;
 
     let p = [];
     if (cm === "builtin" || cm === "mixed") {
@@ -76,25 +81,28 @@ export function useGameState({
   }, []); // empty deps — always reads from paramsRef
 
   // Stable next — never recreated, always operates on latest data via refs
-  const next = useCallback((forcedType = null) => {
-    const p = computePool(forcedType);
-    if (p.length === 0) return;
+  const next = useCallback(
+    (forcedType = null) => {
+      const p = computePool(forcedType);
+      if (p.length === 0) return;
 
-    const question = getNextQuestion(p, historyRef.current);
-    if (!question) return;
+      const question = getNextQuestion(p, historyRef.current);
+      if (!question) return;
 
-    historyRef.current = [...historyRef.current, question.id];
-    setHistoryLength(historyRef.current.length);
-    setCurrentQuestion(question);
-    setRoundCount((c) => c + 1);
+      historyRef.current = [...historyRef.current, question.id];
+      setHistoryLength(historyRef.current.length);
+      setCurrentQuestion(question);
+      setRoundCount((c) => c + 1);
 
-    const { players: pl } = paramsRef.current;
-    if (pl && pl.length > 0) {
-      setCurrentPlayer(pl[Math.floor(Math.random() * pl.length)]);
-    } else {
-      setCurrentPlayer(null);
-    }
-  }, [computePool]);
+      const { players: pl } = paramsRef.current;
+      if (pl && pl.length > 0) {
+        setCurrentPlayer(pl[Math.floor(Math.random() * pl.length)]);
+      } else {
+        setCurrentPlayer(null);
+      }
+    },
+    [computePool],
+  );
 
   const reset = useCallback(() => {
     historyRef.current = [];
