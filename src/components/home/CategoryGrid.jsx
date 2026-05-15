@@ -1,11 +1,31 @@
-import { Link } from 'react-router-dom';
-import { useApp } from '../../store/AppContext';
+import { Link } from "react-router-dom";
+import { useApp } from "../../store/AppContext";
 
 const CATEGORIES = [
-  { key: 'classic', emoji: '🎯', gradient: 'from-violet-600 to-purple-700', path: '/games' },
-  { key: 'drinking', emoji: '🥃', gradient: 'from-red-500 to-rose-600', path: '/games' },
-  { key: 'couples', emoji: '💑', gradient: 'from-pink-500 to-fuchsia-600', path: '/games/couples' },
-  { key: 'custom', emoji: '✨', gradient: 'from-amber-500 to-orange-600', path: '/custom' },
+  {
+    key: "classic",
+    emoji: "🎯",
+    gradient: "from-violet-600 to-purple-700",
+    path: "/games",
+  },
+  {
+    key: "drinking",
+    emoji: "🥃",
+    gradient: "from-red-500 to-rose-600",
+    path: "/games",
+  },
+  {
+    key: "couples",
+    emoji: "💑",
+    gradient: "from-pink-500 to-fuchsia-600",
+    path: "/games/couples",
+  },
+  {
+    key: "custom",
+    emoji: "✨",
+    gradient: "from-amber-500 to-orange-600",
+    path: "/custom",
+  },
 ];
 
 export default function CategoryGrid() {
@@ -15,8 +35,10 @@ export default function CategoryGrid() {
     <section className="py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10">
-          <h2 className={`text-3xl font-black mb-3 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            {t('home.categories.title')}
+          <h2
+            className={`text-3xl font-black mb-3 ${isDark ? "text-white" : "text-slate-900"}`}
+          >
+            {t("home.categories.title")}
           </h2>
         </div>
 

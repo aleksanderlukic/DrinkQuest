@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { getNextQuestion, randomItem, generateId } from '../utils/randomizer';
+import { useState, useCallback } from "react";
+import { getNextQuestion, randomItem, generateId } from "../utils/randomizer";
 
 /**
  * Generic game state hook.
@@ -14,8 +14,8 @@ export function useGameState({
   builtinQuestions = [],
   customQuestions = [],
   players = [],
-  difficulty = 'all',
-  contentMode = 'mixed',
+  difficulty = "all",
+  contentMode = "mixed",
   activeTypes = null,
 }) {
   const [history, setHistory] = useState([]);
@@ -26,17 +26,20 @@ export function useGameState({
   const getPool = useCallback(() => {
     let pool = [];
 
-    if (contentMode === 'builtin' || contentMode === 'mixed') {
+    if (contentMode === "builtin" || contentMode === "mixed") {
       pool = [...pool, ...builtinQuestions];
     }
-    if ((contentMode === 'custom' || contentMode === 'mixed') && customQuestions.length > 0) {
+    if (
+      (contentMode === "custom" || contentMode === "mixed") &&
+      customQuestions.length > 0
+    ) {
       pool = [...pool, ...customQuestions];
     }
-    if (pool.length === 0 && contentMode !== 'builtin') {
+    if (pool.length === 0 && contentMode !== "builtin") {
       pool = [...builtinQuestions];
     }
 
-    if (difficulty !== 'all') {
+    if (difficulty !== "all") {
       pool = pool.filter((q) => q.difficulty === difficulty);
     }
 
@@ -68,7 +71,7 @@ export function useGameState({
         setCurrentPlayer(null);
       }
     },
-    [getPool, history, players]
+    [getPool, history, players],
   );
 
   const reset = useCallback(() => {

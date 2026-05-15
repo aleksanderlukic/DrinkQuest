@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import { useApp } from '../../store/AppContext';
+import { Link } from "react-router-dom";
+import { useApp } from "../../store/AppContext";
 
 export default function CTASection() {
   const { t } = useApp();
@@ -16,16 +16,16 @@ export default function CTASection() {
 
           <div className="relative z-10">
             <h2 className="text-4xl font-black text-white mb-4">
-              {t('home.cta.title')}
+              {t("home.cta.title")}
             </h2>
             <p className="text-white/80 mb-8 leading-relaxed">
-              {t('home.cta.subtitle')}
+              {t("home.cta.subtitle")}
             </p>
             <Link
               to="/games"
               className="inline-block px-10 py-4 rounded-2xl font-black text-base bg-white text-violet-700 hover:bg-violet-50 transition-all active:scale-95 shadow-xl"
             >
-              {t('home.cta.button')} 🚀
+              {t("home.cta.button")} 🚀
             </Link>
           </div>
         </div>

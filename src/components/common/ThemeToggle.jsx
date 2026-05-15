@@ -1,4 +1,4 @@
-import { useApp } from '../../store/AppContext';
+import { useApp } from "../../store/AppContext";
 
 export default function ThemeToggle() {
   const { theme, toggleTheme, isDark } = useApp();
@@ -6,13 +6,13 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
       className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 active:scale-90 ${
         isDark
-          ? 'bg-white/10 hover:bg-white/20 text-yellow-300'
-          : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+          ? "bg-white/10 hover:bg-white/20 text-yellow-300"
+          : "bg-slate-100 hover:bg-slate-200 text-slate-600"
       }`}
-      aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
     >
       {isDark ? (
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">

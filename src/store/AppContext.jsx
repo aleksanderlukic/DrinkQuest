@@ -1,58 +1,88 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { storage, STORAGE_KEYS } from '../utils/localStorage';
-import { en } from '../i18n/en';
-import { sv } from '../i18n/sv';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+import { storage, STORAGE_KEYS } from "../utils/localStorage";
+import { en } from "../i18n/en";
+import { sv } from "../i18n/sv";
 
 const AppContext = createContext(null);
 
 const translations = { en, sv };
 
 const DEFAULT_SETTINGS = {
-  difficulty: 'normal',
-  contentMode: 'mixed',
-  nameMode: 'with',
+  difficulty: "normal",
+  contentMode: "mixed",
+  nameMode: "with",
 };
 
 export function AppProvider({ children }) {
   // Theme
-  const [theme, setThemeState] = useState(() => storage.get(STORAGE_KEYS.THEME, 'dark'));
+  const [theme, setThemeState] = useState(() =>
+    storage.get(STORAGE_KEYS.THEME, "dark"),
+  );
 
   // Language
-  const [language, setLanguageState] = useState(() => storage.get(STORAGE_KEYS.LANGUAGE, 'en'));
+  const [language, setLanguageState] = useState(() =>
+    storage.get(STORAGE_KEYS.LANGUAGE, "en"),
+  );
 
   // Players
-  const [players, setPlayersState] = useState(() => storage.get(STORAGE_KEYS.PLAYERS, []));
+  const [players, setPlayersState] = useState(() =>
+    storage.get(STORAGE_KEYS.PLAYERS, []),
+  );
 
   // Favorites (array of game IDs)
-  const [favorites, setFavoritesState] = useState(() => storage.get(STORAGE_KEYS.FAVORITES, []));
+  const [favorites, setFavoritesState] = useState(() =>
+    storage.get(STORAGE_KEYS.FAVORITES, []),
+  );
 
   // Settings
   const [settings, setSettingsState] = useState(() =>
-    storage.get(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS)
+    storage.get(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS),
   );
 
   // Onboarding
   const [onboardingSeen, setOnboardingSeen] = useState(() =>
-    storage.get(STORAGE_KEYS.ONBOARDING_SEEN, false)
+    storage.get(STORAGE_KEYS.ONBOARDING_SEEN, false),
   );
 
   // Custom content
-  const [customTruths, setCustomTruths] = useState(() => storage.get(STORAGE_KEYS.CUSTOM_TRUTHS, []));
-  const [customDares, setCustomDares] = useState(() => storage.get(STORAGE_KEYS.CUSTOM_DARES, []));
-  const [customNhie, setCustomNhie] = useState(() => storage.get(STORAGE_KEYS.CUSTOM_NHIE, []));
-  const [customMlt, setCustomMlt] = useState(() => storage.get(STORAGE_KEYS.CUSTOM_MLT, []));
-  const [customPacks, setCustomPacks] = useState(() => storage.get(STORAGE_KEYS.CUSTOM_PACKS, []));
-  const [customPointing, setCustomPointing] = useState(() => storage.get(STORAGE_KEYS.CUSTOM_POINTING, []));
-  const [customTod, setCustomTod] = useState(() => storage.get(STORAGE_KEYS.CUSTOM_TOD, []));
-  const [customCouples, setCustomCouples] = useState(() => storage.get(STORAGE_KEYS.CUSTOM_COUPLES, []));
+  const [customTruths, setCustomTruths] = useState(() =>
+    storage.get(STORAGE_KEYS.CUSTOM_TRUTHS, []),
+  );
+  const [customDares, setCustomDares] = useState(() =>
+    storage.get(STORAGE_KEYS.CUSTOM_DARES, []),
+  );
+  const [customNhie, setCustomNhie] = useState(() =>
+    storage.get(STORAGE_KEYS.CUSTOM_NHIE, []),
+  );
+  const [customMlt, setCustomMlt] = useState(() =>
+    storage.get(STORAGE_KEYS.CUSTOM_MLT, []),
+  );
+  const [customPacks, setCustomPacks] = useState(() =>
+    storage.get(STORAGE_KEYS.CUSTOM_PACKS, []),
+  );
+  const [customPointing, setCustomPointing] = useState(() =>
+    storage.get(STORAGE_KEYS.CUSTOM_POINTING, []),
+  );
+  const [customTod, setCustomTod] = useState(() =>
+    storage.get(STORAGE_KEYS.CUSTOM_TOD, []),
+  );
+  const [customCouples, setCustomCouples] = useState(() =>
+    storage.get(STORAGE_KEYS.CUSTOM_COUPLES, []),
+  );
 
   // Apply theme to document
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
+    if (theme === "dark") {
+      root.classList.add("dark");
     } else {
-      root.classList.remove('dark');
+      root.classList.remove("dark");
     }
     storage.set(STORAGE_KEYS.THEME, theme);
   }, [theme]);
@@ -61,16 +91,16 @@ export function AppProvider({ children }) {
   const t = useCallback(
     (path, vars = {}) => {
       const trans = translations[language] || translations.en;
-      const keys = path.split('.');
+      const keys = path.split(".");
       let value = trans;
       for (const key of keys) {
-        if (value && typeof value === 'object' && key in value) {
+        if (value && typeof value === "object" && key in value) {
           value = value[key];
         } else {
           // Fallback to English
           let fallback = translations.en;
           for (const k of keys) {
-            if (fallback && typeof fallback === 'object' && k in fallback) {
+            if (fallback && typeof fallback === "object" && k in fallback) {
               fallback = fallback[k];
             } else {
               return path;
@@ -80,15 +110,15 @@ export function AppProvider({ children }) {
           break;
         }
       }
-      if (typeof value !== 'string') return path;
+      if (typeof value !== "string") return path;
       // Replace template variables like {{count}}
       let result = value;
       Object.entries(vars).forEach(([k, v]) => {
-        result = result.replace(new RegExp(`\\{\\{${k}\\}\\}`, 'g'), v);
+        result = result.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), v);
       });
       return result;
     },
-    [language]
+    [language],
   );
 
   // Theme actions
@@ -98,7 +128,7 @@ export function AppProvider({ children }) {
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(theme === "dark" ? "light" : "dark");
   }, [theme, setTheme]);
 
   // Language actions
@@ -116,7 +146,7 @@ export function AppProvider({ children }) {
       setPlayersState(updated);
       storage.set(STORAGE_KEYS.PLAYERS, updated);
     },
-    [players]
+    [players],
   );
 
   const removePlayer = useCallback(
@@ -125,7 +155,7 @@ export function AppProvider({ children }) {
       setPlayersState(updated);
       storage.set(STORAGE_KEYS.PLAYERS, updated);
     },
-    [players]
+    [players],
   );
 
   const clearPlayers = useCallback(() => {
@@ -142,10 +172,13 @@ export function AppProvider({ children }) {
       setFavoritesState(updated);
       storage.set(STORAGE_KEYS.FAVORITES, updated);
     },
-    [favorites]
+    [favorites],
   );
 
-  const isFavorite = useCallback((gameId) => favorites.includes(gameId), [favorites]);
+  const isFavorite = useCallback(
+    (gameId) => favorites.includes(gameId),
+    [favorites],
+  );
 
   const clearFavorites = useCallback(() => {
     setFavoritesState([]);
@@ -159,7 +192,7 @@ export function AppProvider({ children }) {
       setSettingsState(updated);
       storage.set(STORAGE_KEYS.SETTINGS, updated);
     },
-    [settings]
+    [settings],
   );
 
   // Onboarding
@@ -171,20 +204,44 @@ export function AppProvider({ children }) {
   // Custom content helpers
   const makeCustomSetter = (setter, key) => (updater) => {
     setter((prev) => {
-      const next = typeof updater === 'function' ? updater(prev) : updater;
+      const next = typeof updater === "function" ? updater(prev) : updater;
       storage.set(key, next);
       return next;
     });
   };
 
-  const setCustomTruthsSafe = makeCustomSetter(setCustomTruths, STORAGE_KEYS.CUSTOM_TRUTHS);
-  const setCustomDaresSafe = makeCustomSetter(setCustomDares, STORAGE_KEYS.CUSTOM_DARES);
-  const setCustomNhieSafe = makeCustomSetter(setCustomNhie, STORAGE_KEYS.CUSTOM_NHIE);
-  const setCustomMltSafe = makeCustomSetter(setCustomMlt, STORAGE_KEYS.CUSTOM_MLT);
-  const setCustomPacksSafe = makeCustomSetter(setCustomPacks, STORAGE_KEYS.CUSTOM_PACKS);
-  const setCustomPointingSafe = makeCustomSetter(setCustomPointing, STORAGE_KEYS.CUSTOM_POINTING);
-  const setCustomTodSafe = makeCustomSetter(setCustomTod, STORAGE_KEYS.CUSTOM_TOD);
-  const setCustomCouplesSafe = makeCustomSetter(setCustomCouples, STORAGE_KEYS.CUSTOM_COUPLES);
+  const setCustomTruthsSafe = makeCustomSetter(
+    setCustomTruths,
+    STORAGE_KEYS.CUSTOM_TRUTHS,
+  );
+  const setCustomDaresSafe = makeCustomSetter(
+    setCustomDares,
+    STORAGE_KEYS.CUSTOM_DARES,
+  );
+  const setCustomNhieSafe = makeCustomSetter(
+    setCustomNhie,
+    STORAGE_KEYS.CUSTOM_NHIE,
+  );
+  const setCustomMltSafe = makeCustomSetter(
+    setCustomMlt,
+    STORAGE_KEYS.CUSTOM_MLT,
+  );
+  const setCustomPacksSafe = makeCustomSetter(
+    setCustomPacks,
+    STORAGE_KEYS.CUSTOM_PACKS,
+  );
+  const setCustomPointingSafe = makeCustomSetter(
+    setCustomPointing,
+    STORAGE_KEYS.CUSTOM_POINTING,
+  );
+  const setCustomTodSafe = makeCustomSetter(
+    setCustomTod,
+    STORAGE_KEYS.CUSTOM_TOD,
+  );
+  const setCustomCouplesSafe = makeCustomSetter(
+    setCustomCouples,
+    STORAGE_KEYS.CUSTOM_COUPLES,
+  );
 
   const clearCustomContent = useCallback(() => {
     setCustomTruths([]);
@@ -222,7 +279,7 @@ export function AppProvider({ children }) {
     theme,
     setTheme,
     toggleTheme,
-    isDark: theme === 'dark',
+    isDark: theme === "dark",
 
     // Language
     language,
@@ -277,6 +334,6 @@ export function AppProvider({ children }) {
 
 export function useApp() {
   const ctx = useContext(AppContext);
-  if (!ctx) throw new Error('useApp must be used within AppProvider');
+  if (!ctx) throw new Error("useApp must be used within AppProvider");
   return ctx;
 }

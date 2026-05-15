@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
-import { useApp } from '../../store/AppContext';
+import { motion } from "framer-motion";
+import { useApp } from "../../store/AppContext";
 
-export default function FavoriteButton({ gameId, className = '' }) {
+export default function FavoriteButton({ gameId, className = "" }) {
   const { isFavorite, toggleFavorite } = useApp();
   const fav = isFavorite(gameId);
 
@@ -15,14 +15,14 @@ export default function FavoriteButton({ gameId, className = '' }) {
       whileTap={{ scale: 0.8 }}
       className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 ${
         fav
-          ? 'bg-pink-500/20 text-pink-400'
-          : 'bg-white/10 text-slate-400 hover:text-pink-400 hover:bg-pink-500/10'
+          ? "bg-pink-500/20 text-pink-400"
+          : "bg-white/10 text-slate-400 hover:text-pink-400 hover:bg-pink-500/10"
       } ${className}`}
-      aria-label={fav ? 'Remove from favorites' : 'Add to favorites'}
+      aria-label={fav ? "Remove from favorites" : "Add to favorites"}
     >
       <svg
         className="w-5 h-5"
-        fill={fav ? 'currentColor' : 'none'}
+        fill={fav ? "currentColor" : "none"}
         stroke="currentColor"
         viewBox="0 0 24 24"
       >

@@ -1,12 +1,30 @@
-import { useApp } from '../../store/AppContext';
+import { useApp } from "../../store/AppContext";
 
-export default function GameControls({ onNext, onReset, modes = [], activeMode, onModeChange }) {
+export default function GameControls({
+  onNext,
+  onReset,
+  modes = [],
+  activeMode,
+  onModeChange,
+}) {
   const { t, isDark } = useApp();
 
   const modeConfig = {
-    truth: { label: t('game.modes.truth'), emoji: '💬', color: 'from-violet-600 to-purple-700' },
-    dare: { label: t('game.modes.dare'), emoji: '🎯', color: 'from-pink-600 to-rose-700' },
-    random: { label: t('game.modes.random'), emoji: '🎲', color: 'from-amber-500 to-orange-600' },
+    truth: {
+      label: t("game.play.truth"),
+      emoji: "💬",
+      color: "from-violet-600 to-purple-700",
+    },
+    dare: {
+      label: t("game.play.dare"),
+      emoji: "🎯",
+      color: "from-pink-600 to-rose-700",
+    },
+    random: {
+      label: t("game.play.random"),
+      emoji: "🎲",
+      color: "from-amber-500 to-orange-600",
+    },
   };
 
   return (
@@ -15,7 +33,11 @@ export default function GameControls({ onNext, onReset, modes = [], activeMode, 
       {modes.length > 0 && (
         <div className="flex gap-2">
           {modes.map((mode) => {
-            const cfg = modeConfig[mode] || { label: mode, emoji: '🎮', color: 'from-slate-500 to-slate-600' };
+            const cfg = modeConfig[mode] || {
+              label: mode,
+              emoji: "🎮",
+              color: "from-slate-500 to-slate-600",
+            };
             const active = activeMode === mode;
             return (
               <button
@@ -25,8 +47,8 @@ export default function GameControls({ onNext, onReset, modes = [], activeMode, 
                   active
                     ? `bg-gradient-to-r ${cfg.color} text-white shadow-lg`
                     : isDark
-                    ? 'bg-white/10 text-slate-300 hover:bg-white/20'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? "bg-white/10 text-slate-300 hover:bg-white/20"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
               >
                 {cfg.emoji} {cfg.label}
@@ -42,17 +64,17 @@ export default function GameControls({ onNext, onReset, modes = [], activeMode, 
           onClick={onNext}
           className="flex-[3] py-4 rounded-2xl font-black text-base btn-primary active:scale-95 transition-all"
         >
-          {t('game.controls.next')} →
+          {t("game.play.next")} →
         </button>
         <button
           onClick={onReset}
           className={`flex-1 py-4 rounded-2xl font-bold text-sm active:scale-95 transition-all ${
             isDark
-              ? 'bg-white/10 text-slate-400 hover:bg-white/20 hover:text-white'
-              : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
+              ? "bg-white/10 text-slate-400 hover:bg-white/20 hover:text-white"
+              : "bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900"
           }`}
         >
-          {t('game.controls.reset')}
+          {t("game.play.reset")}
         </button>
       </div>
     </div>

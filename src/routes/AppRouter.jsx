@@ -1,18 +1,18 @@
-import { Routes, Route } from 'react-router-dom';
-import HomePage from '../pages/HomePage';
-import GamesPage from '../pages/GamesPage';
-import TruthOrDarePage from '../pages/TruthOrDarePage';
-import NeverHaveIEverPage from '../pages/NeverHaveIEverPage';
-import MostLikelyToPage from '../pages/MostLikelyToPage';
-import PointingGamePage from '../pages/PointingGamePage';
-import SpinTheBottlePage from '../pages/SpinTheBottlePage';
-import TruthOrDrinkPage from '../pages/TruthOrDrinkPage';
-import CouplesPage from '../pages/CouplesPage';
-import CustomPage from '../pages/CustomPage';
-import GeneratorPage from '../pages/GeneratorPage';
-import FavoritesPage from '../pages/FavoritesPage';
-import SettingsPage from '../pages/SettingsPage';
-import NotFoundPage from '../pages/NotFoundPage';
+import { Routes, Route } from "react-router-dom";
+import HomePage from "../pages/HomePage";
+import GamesPage from "../pages/GamesPage";
+import TruthOrDarePage from "../pages/TruthOrDarePage";
+import NeverHaveIEverPage from "../pages/NeverHaveIEverPage";
+import MostLikelyToPage from "../pages/MostLikelyToPage";
+import PointingGamePage from "../pages/PointingGamePage";
+import SpinTheBottlePage from "../pages/SpinTheBottlePage";
+import TruthOrDrinkPage from "../pages/TruthOrDrinkPage";
+import CouplesPage from "../pages/CouplesPage";
+import CustomPage from "../pages/CustomPage";
+import GeneratorPage from "../pages/GeneratorPage";
+import FavoritesPage from "../pages/FavoritesPage";
+import SettingsPage from "../pages/SettingsPage";
+import NotFoundPage from "../pages/NotFoundPage";
 
 export default function AppRouter() {
   return (

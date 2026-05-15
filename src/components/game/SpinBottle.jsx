@@ -1,9 +1,9 @@
-import { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useApp } from '../../store/AppContext';
-import { randomItem, randomInt } from '../../utils/randomizer';
+import { useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useApp } from "../../store/AppContext";
+import { randomItem, randomInt } from "../../utils/randomizer";
 
-export default function SpinBottle({ players = [], spinMode = 'random' }) {
+export default function SpinBottle({ players = [], spinMode = "random" }) {
   const { t, isDark } = useApp();
   const [rotation, setRotation] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
@@ -27,8 +27,8 @@ export default function SpinBottle({ players = [], spinMode = 'random' }) {
       // Pick result based on mode
       const selectedPlayer = players.length > 0 ? randomItem(players) : null;
       let action = spinMode;
-      if (spinMode === 'random') {
-        action = randomItem(['truth', 'dare', 'drink']);
+      if (spinMode === "random") {
+        action = randomItem(["truth", "dare", "drink"]);
       }
       setResult({ player: selectedPlayer, action });
     }, 3000);
@@ -36,12 +36,16 @@ export default function SpinBottle({ players = [], spinMode = 'random' }) {
 
   const actionLabel = (action) => {
     const labels = {
-      truth: { text: t('spin.truth'), emoji: '💬', color: 'text-violet-400' },
-      dare: { text: t('spin.dare'), emoji: '🎯', color: 'text-pink-400' },
-      drink: { text: t('spin.drink'), emoji: '🥃', color: 'text-amber-400' },
-      kiss: { text: t('spin.kiss'), emoji: '💋', color: 'text-rose-400' },
+      truth: {
+        text: t("spin.modes.truth"),
+        emoji: "",
+        color: "text-violet-400",
+      },
+      dare: { text: t("spin.modes.dare"), emoji: "", color: "text-pink-400" },
+      drink: { text: "Drink 🥃", emoji: "", color: "text-amber-400" },
+      kiss: { text: t("spin.modes.kiss"), emoji: "", color: "text-rose-400" },
     };
-    return labels[action] || { text: action, emoji: '🎲', color: 'text-white' };
+    return labels[action] || { text: action, emoji: "🎲", color: "text-white" };
   };
 
   return (
@@ -49,7 +53,7 @@ export default function SpinBottle({ players = [], spinMode = 'random' }) {
       {/* Bottle */}
       <div className="relative w-48 h-48 flex items-center justify-center">
         <div
-          className={`absolute inset-0 rounded-full ${isDark ? 'bg-violet-600/10' : 'bg-violet-100'}`}
+          className={`absolute inset-0 rounded-full ${isDark ? "bg-violet-600/10" : "bg-violet-100"}`}
         />
         <motion.div
           style={{ rotate: rotation }}
@@ -71,11 +75,11 @@ export default function SpinBottle({ players = [], spinMode = 'random' }) {
         disabled={isSpinning}
         className={`px-10 py-4 rounded-2xl font-black text-base transition-all active:scale-95 ${
           isSpinning
-            ? 'opacity-50 cursor-not-allowed bg-slate-700 text-slate-500'
-            : 'btn-primary'
+            ? "opacity-50 cursor-not-allowed bg-slate-700 text-slate-500"
+            : "btn-primary"
         }`}
       >
-        {isSpinning ? t('spin.spinning') : t('spin.spin')} 🌀
+        {isSpinning ? t("spin.spinning") : t("spin.spin")} 🌀
       </button>
 
       {/* Result */}
@@ -86,11 +90,15 @@ export default function SpinBottle({ players = [], spinMode = 'random' }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8 }}
             className={`w-full rounded-2xl p-6 text-center ${
-              isDark ? 'bg-slate-900 border border-white/10' : 'bg-white border border-slate-200 shadow-lg'
+              isDark
+                ? "bg-slate-900 border border-white/10"
+                : "bg-white border border-slate-200 shadow-lg"
             }`}
           >
             {result.player && (
-              <p className={`text-lg font-black mb-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              <p
+                className={`text-lg font-black mb-1 ${isDark ? "text-white" : "text-slate-900"}`}
+              >
                 {result.player}
               </p>
             )}
@@ -98,8 +106,7 @@ export default function SpinBottle({ players = [], spinMode = 'random' }) {
               const lbl = actionLabel(result.action);
               return (
                 <div>
-                  <span className="text-4xl">{lbl.emoji}</span>
-                  <p className={`text-sm font-bold mt-2 ${lbl.color}`}>{lbl.text}</p>
+                  <p className={`text-lg font-bold ${lbl.color}`}>{lbl.text}</p>
                 </div>
               );
             })()}

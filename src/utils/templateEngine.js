@@ -3,11 +3,11 @@
  * Supports {name}, {name1}, {name2}, {place}, {event}, {group}, {vibe}
  */
 export function fillTemplate(template, data = {}) {
-  if (!template) return '';
+  if (!template) return "";
   let result = template;
   Object.entries(data).forEach(([key, value]) => {
     if (value) {
-      result = result.replace(new RegExp(`\\{${key}\\}`, 'g'), value);
+      result = result.replace(new RegExp(`\\{${key}\\}`, "g"), value);
     }
   });
   return result;
@@ -28,9 +28,9 @@ export function pickRandom(arr, count = 1) {
 export function resolvePlayers(template, players = []) {
   if (!players.length) {
     return template
-      .replace(/\{name\}/g, 'you')
-      .replace(/\{name1\}/g, 'Player 1')
-      .replace(/\{name2\}/g, 'Player 2');
+      .replace(/\{name\}/g, "you")
+      .replace(/\{name1\}/g, "Player 1")
+      .replace(/\{name2\}/g, "Player 2");
   }
 
   const shuffled = [...players].sort(() => Math.random() - 0.5);
@@ -47,7 +47,10 @@ export function resolvePlayers(template, players = []) {
 /**
  * Fully resolve a template with all possible data sources.
  */
-export function resolveTemplate(template, { players = [], place = '', event = '', group = '', vibe = '' } = {}) {
+export function resolveTemplate(
+  template,
+  { players = [], place = "", event = "", group = "", vibe = "" } = {},
+) {
   let result = resolvePlayers(template, players);
   result = fillTemplate(result, { place, event, group, vibe });
   return result;
