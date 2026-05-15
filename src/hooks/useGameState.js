@@ -1,5 +1,5 @@
-import { useState, useCallback, useRef, useMemo } from "react";
-import { getNextQuestion, randomItem } from "../utils/randomizer";
+import { useState, useCallback, useRef } from "react";
+import { getNextQuestion } from "../utils/randomizer";
 
 /**
  * Generic game state hook.
@@ -23,57 +23,78 @@ export function useGameState({
   const [roundCount, setRoundCount] = useState(0);
   const [historyLength, setHistoryLength] = useState(0);
 
-  // Use a ref for history so next() always reads the latest value
-  // without needing history in its dependency array (avoids stale closure).
+  // historyRef lets next() always see the latest history without it
+  // being a stale closure dependency.
   const historyRef = useRef([]);
 
-  const pool = useMemo(() => {
+  // paramsRef lets next() always read the latest pool params so the
+  // callback never needs to be recreated when params change.
+  const paramsRef = useRef({
+    builtinQuestions,
+    customQuestions,
+    players,
+    difficulty,
+    contentMode,
+    activeTypes,
+  });
+  // Sync every render — safe because next() is only called from event handlers
+  // which run after the render is committed.
+  paramsRef.current = {
+    builtinQuestions,
+    customQuestions,
+    players,
+    difficulty,
+    contentMode,
+    activeTypes,
+  };
+
+  // Stable helper: always computes from paramsRef.current
+  const computePool = useCallback((forcedType = null) => {
+    const { builtinQuestions: bq, customQuestions: cq, difficulty: diff, contentMode: cm, activeTypes: at } =
+      paramsRef.current;
+
     let p = [];
-    if (contentMode === "builtin" || contentMode === "mixed") {
-      p = [...p, ...builtinQuestions];
+    if (cm === "builtin" || cm === "mixed") {
+      p = [...p, ...(bq || [])];
     }
-    if (
-      (contentMode === "custom" || contentMode === "mixed") &&
-      customQuestions.length > 0
-    ) {
-      p = [...p, ...customQuestions];
+    if ((cm === "custom" || cm === "mixed") && (cq || []).length > 0) {
+      p = [...p, ...(cq || [])];
     }
-    if (p.length === 0 && contentMode !== "builtin") {
-      p = [...builtinQuestions];
+    if (p.length === 0 && cm !== "builtin") {
+      p = [...(bq || [])];
     }
-    if (difficulty !== "all") {
-      p = p.filter((q) => q.difficulty === difficulty);
+    if (diff !== "all") {
+      p = p.filter((q) => q.difficulty === diff);
     }
-    if (activeTypes && activeTypes.length > 0) {
-      p = p.filter((q) => activeTypes.includes(q.type));
+    if (at && at.length > 0) {
+      p = p.filter((q) => at.includes(q.type));
+    }
+    if (forcedType) {
+      p = p.filter((q) => q.type === forcedType);
     }
     return p;
-  }, [builtinQuestions, customQuestions, difficulty, contentMode, activeTypes]);
+  }, []); // empty deps — always reads from paramsRef
 
-  const next = useCallback(
-    (forcedType = null) => {
-      let p = pool;
-      if (forcedType) {
-        p = p.filter((q) => q.type === forcedType);
-      }
-      if (p.length === 0) return;
+  // Stable next — never recreated, always operates on latest data via refs
+  const next = useCallback((forcedType = null) => {
+    const p = computePool(forcedType);
+    if (p.length === 0) return;
 
-      const question = getNextQuestion(p, historyRef.current);
-      if (!question) return;
+    const question = getNextQuestion(p, historyRef.current);
+    if (!question) return;
 
-      historyRef.current = [...historyRef.current, question.id];
-      setHistoryLength(historyRef.current.length);
-      setCurrentQuestion(question);
-      setRoundCount((c) => c + 1);
+    historyRef.current = [...historyRef.current, question.id];
+    setHistoryLength(historyRef.current.length);
+    setCurrentQuestion(question);
+    setRoundCount((c) => c + 1);
 
-      if (players.length > 0) {
-        setCurrentPlayer(players[Math.floor(Math.random() * players.length)]);
-      } else {
-        setCurrentPlayer(null);
-      }
-    },
-    [pool, players],
-  );
+    const { players: pl } = paramsRef.current;
+    if (pl && pl.length > 0) {
+      setCurrentPlayer(pl[Math.floor(Math.random() * pl.length)]);
+    } else {
+      setCurrentPlayer(null);
+    }
+  }, [computePool]);
 
   const reset = useCallback(() => {
     historyRef.current = [];
@@ -83,6 +104,8 @@ export function useGameState({
     setRoundCount(0);
   }, []);
 
+  // Pool for rendering (allUsed, totalQuestions etc.)
+  const pool = computePool();
   const totalQuestions = pool.length;
   const usedCount = historyLength;
   const allUsed = totalQuestions > 0 && usedCount >= totalQuestions * 1.5;
