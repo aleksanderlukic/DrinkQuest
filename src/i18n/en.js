@@ -160,19 +160,22 @@ export const en = {
     },
     twoTruths: {
       title: "Two Truths and a Lie",
-      description: "Share 2 truths and 1 lie — others guess which is the lie. Wrong guess = drink!",
+      description:
+        "Share 2 truths and 1 lie — others guess which is the lie. Wrong guess = drink!",
       shortDesc: "Spot the lie!",
       howToPlay: "How to play:",
       rule1: "1. The active player thinks of 2 truths and 1 lie.",
       rule2: "2. Say all three statements out loud in any order.",
       rule3: "3. Everyone else votes which one they think is the lie.",
-      rule4: "4. Wrong guessers drink! If everyone guesses right — the presenter drinks!",
+      rule4:
+        "4. Wrong guessers drink! If everyone guesses right — the presenter drinks!",
       statement1: "Statement 1",
       statement2: "Statement 2",
       statement3: "Statement 3",
       statementN: "Statement {{n}}",
       itsYourTurn: "Your turn!",
-      presentInstruction: "Think of 2 truths and 1 lie. Say them out loud in any order. Press when everyone has heard them!",
+      presentInstruction:
+        "Think of 2 truths and 1 lie. Say them out loud in any order. Press when everyone has heard them!",
       everyoneReady: "Everyone's heard them",
       votePhase: "Vote!",
       nowVoting: "Now voting:",

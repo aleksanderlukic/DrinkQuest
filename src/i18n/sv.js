@@ -161,19 +161,22 @@ export const sv = {
     },
     twoTruths: {
       title: "Två Sanningar och en Lögn",
-      description: "Berätta 2 sanningar och 1 lögn — andra gissar vilken som är lögnen. Fel gissning = drick!",
+      description:
+        "Berätta 2 sanningar och 1 lögn — andra gissar vilken som är lögnen. Fel gissning = drick!",
       shortDesc: "Hitta lögnen!",
       howToPlay: "Hur man spelar:",
       rule1: "1. Den aktiva spelaren tänker ut 2 sanningar och 1 lögn.",
       rule2: "2. Säg alla tre påståenden högt i slumpmässig ordning.",
       rule3: "3. Alla andra röstar vilken de tror är lögnen.",
-      rule4: "4. De som gissade fel dricker! Om alla gissade rätt — presentatören dricker!",
+      rule4:
+        "4. De som gissade fel dricker! Om alla gissade rätt — presentatören dricker!",
       statement1: "Påstående 1",
       statement2: "Påstående 2",
       statement3: "Påstående 3",
       statementN: "Påstående {{n}}",
       itsYourTurn: "Din tur!",
-      presentInstruction: "Tänk ut 2 sanningar och 1 lögn. Säg dem högt i valfri ordning. Tryck när alla har hört dem!",
+      presentInstruction:
+        "Tänk ut 2 sanningar och 1 lögn. Säg dem högt i valfri ordning. Tryck när alla har hört dem!",
       everyoneReady: "Alla har hört dem",
       votePhase: "Rösta!",
       nowVoting: "Nu röstar:",

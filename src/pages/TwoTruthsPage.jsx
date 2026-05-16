@@ -6,14 +6,15 @@ import PlayerList from "../components/game/PlayerList";
 
 const PHASES = {
   SETUP: "setup",
-  PRESENT: "present",   // active player presents 3 statements
-  VOTE: "vote",         // others vote which is the lie
-  REVEAL: "reveal",     // host reveals the lie
-  RESULT: "result",     // show who drinks
+  PRESENT: "present", // active player presents 3 statements
+  VOTE: "vote", // others vote which is the lie
+  REVEAL: "reveal", // host reveals the lie
+  RESULT: "result", // show who drinks
 };
 
 export default function TwoTruthsPage() {
-  const { t, isDark, players, addPlayer, removePlayer, clearPlayers } = useApp();
+  const { t, isDark, players, addPlayer, removePlayer, clearPlayers } =
+    useApp();
 
   const [phase, setPhase] = useState(PHASES.SETUP);
   const [playerOrder, setPlayerOrder] = useState([]);
@@ -77,13 +78,9 @@ export default function TwoTruthsPage() {
 
   // Who guessed correctly?
   const correctGuessers =
-    lieIndex !== null
-      ? otherPlayers.filter((p) => votes[p] === lieIndex)
-      : [];
+    lieIndex !== null ? otherPlayers.filter((p) => votes[p] === lieIndex) : [];
   const wrongGuessers =
-    lieIndex !== null
-      ? otherPlayers.filter((p) => votes[p] !== lieIndex)
-      : [];
+    lieIndex !== null ? otherPlayers.filter((p) => votes[p] !== lieIndex) : [];
 
   const statementLabels = [
     t("games.twoTruths.statement1"),
@@ -117,7 +114,9 @@ export default function TwoTruthsPage() {
             <div
               className={`rounded-2xl p-4 text-sm space-y-1.5 ${isDark ? "bg-white/5" : "bg-violet-50"}`}
             >
-              <p className={`font-bold ${isDark ? "text-violet-300" : "text-violet-700"}`}>
+              <p
+                className={`font-bold ${isDark ? "text-violet-300" : "text-violet-700"}`}
+              >
                 {t("games.twoTruths.howToPlay")}
               </p>
               {[1, 2, 3, 4].map((n) => (

@@ -5,7 +5,9 @@ export default function LeaderboardPage() {
   const { t, isDark, players: globalPlayers } = useApp();
 
   // Local player list so users can add/remove without affecting other games
-  const [localPlayers, setLocalPlayers] = useState(() => [...(globalPlayers || [])]);
+  const [localPlayers, setLocalPlayers] = useState(() => [
+    ...(globalPlayers || []),
+  ]);
   const [newName, setNewName] = useState("");
 
   // drinks[playerName] = count
@@ -21,7 +23,11 @@ export default function LeaderboardPage() {
 
   const ranking = useMemo(() => {
     const names = [
-      ...new Set([...localPlayers, ...Object.keys(drinks), ...Object.keys(points)]),
+      ...new Set([
+        ...localPlayers,
+        ...Object.keys(drinks),
+        ...Object.keys(points),
+      ]),
     ];
     const scores = activeTab === "drinks" ? drinks : points;
     return names
@@ -45,8 +51,16 @@ export default function LeaderboardPage() {
 
   const removeLocalPlayer = (name) => {
     setLocalPlayers((prev) => prev.filter((p) => p !== name));
-    setDrinks((prev) => { const next = { ...prev }; delete next[name]; return next; });
-    setPoints((prev) => { const next = { ...prev }; delete next[name]; return next; });
+    setDrinks((prev) => {
+      const next = { ...prev };
+      delete next[name];
+      return next;
+    });
+    setPoints((prev) => {
+      const next = { ...prev };
+      delete next[name];
+      return next;
+    });
   };
 
   const clearAll = () => {
@@ -109,7 +123,9 @@ export default function LeaderboardPage() {
         <div
           className={`rounded-2xl p-4 ${isDark ? "bg-white/5 border border-white/10" : "bg-white border border-slate-200 shadow-sm"}`}
         >
-          <p className={`text-xs font-semibold mb-3 ${isDark ? "text-slate-400" : "text-slate-500"}`}>
+          <p
+            className={`text-xs font-semibold mb-3 ${isDark ? "text-slate-400" : "text-slate-500"}`}
+          >
             {t("leaderboard.addPlayer")}
           </p>
           <div className="flex gap-2">
