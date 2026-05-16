@@ -9,6 +9,7 @@ import SpinTheBottlePage from "../pages/SpinTheBottlePage";
 import TruthOrDrinkPage from "../pages/TruthOrDrinkPage";
 import CouplesPage from "../pages/CouplesPage";
 import PartyPredictionsPage from "../pages/PartyPredictionsPage";
+import TwoTruthsPage from "../pages/TwoTruthsPage";
 import LeaderboardPage from "../pages/LeaderboardPage";
 import CustomPage from "../pages/CustomPage";
 import GeneratorPage from "../pages/GeneratorPage";
@@ -32,6 +33,7 @@ export default function AppRouter() {
         path="/games/party-predictions"
         element={<PartyPredictionsPage />}
       />
+      <Route path="/games/two-truths" element={<TwoTruthsPage />} />
       <Route path="/leaderboard" element={<LeaderboardPage />} />
       <Route path="/custom" element={<CustomPage />} />
       <Route path="/generator" element={<GeneratorPage />} />

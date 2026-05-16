@@ -95,4 +95,16 @@ export const gamesList = [
     featured: false,
     popular: true,
   },
+  {
+    id: "two-truths",
+    path: "/games/two-truths",
+    emoji: "🤥",
+    gradient: "from-rose-500 to-pink-600",
+    categoryKey: "Classic",
+    titleKey: "games.twoTruths.title",
+    descKey: "games.twoTruths.description",
+    shortDescKey: "games.twoTruths.shortDesc",
+    featured: false,
+    popular: true,
+  },
 ];
