@@ -1,17 +1,23 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useApp } from "../../store/AppContext";
+import { en } from "../../i18n/en";
+import { sv } from "../../i18n/sv";
+
+const allTranslations = { en, sv };
 
 export default function OnboardingModal() {
   const { t, onboardingSeen, completeOnboarding, isDark, language } = useApp();
   const [step, setStep] = useState(0);
 
-  const steps = t("onboarding.steps") || [];
-  const totalSteps = Array.isArray(steps) ? steps.length : 5;
+  // t() only returns strings; access the array directly from translations
+  const trans = allTranslations[language] || allTranslations.en;
+  const steps = trans?.onboarding?.steps || [];
+  const totalSteps = steps.length || 5;
 
   if (onboardingSeen) return null;
 
-  const currentStep = Array.isArray(steps) ? steps[step] : null;
+  const currentStep = steps[step] ?? null;
 
   const handleNext = () => {
     if (step < totalSteps - 1) {
